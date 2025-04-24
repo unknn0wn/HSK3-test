@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Взлом системы...</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      font-family: monospace;
+    }
+
+    #matrixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    #output {
+      position: relative;
+      z-index: 1;
+      color: #00ff00;
+      padding: 2rem;
+      white-space: pre-line;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrixCanvas"></canvas>
+  <div id="output">Запуск системы...\n</div>
+
+  <script>
+    // Эффект Матрицы
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const katakana = "アァイィウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン";
+    const latin = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const chars = katakana + latin;
+
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#0F0";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 33);
+
+    // Пранк-вывод
+    const lines = [
+      "Подключение к устройству...",
+      "Получение доступа к камере...",
+      "Сканирование лица...",
+      "Анализ внешности...",
+      "получено данные: истории браузера, аккаунты Google и тд!",
+      "KONDA !",
+      "попался!"
+    ];
+
+    let i = 0;
+    const output = document.getElementById("output");
+
+    function typeLine() {
+      if (i < lines.length) {
+        output.innerText += lines[i] + "\n";
+        i++;
+        setTimeout(typeLine, 1000);
+      }
+    }
+
+    setTimeout(typeLine, 1500);
+  </script>
+</body>
+</html>
